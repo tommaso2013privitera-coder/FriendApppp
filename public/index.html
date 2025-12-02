@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>FRIEND APP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-box">
+        <h1>FRIEND APP</h1>
+        <input id="username" placeholder="Username"><br>
+        <p>Quanto fa 4 + 1?</p>
+        <input id="captcha" placeholder="Risposta"><br>
+        <button onclick="login()">ENTRA</button>
+    </div>
+
+    <div id="chat-box" style="display:none;">
+        <h1>Chat – FRIEND APP</h1>
+        <div id="messages"></div>
+        <input id="msg" placeholder="Scrivi un messaggio">
+        <button onclick="sendMsg()">Invia</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let username = "";
+
+        function login() {
+            username = document.getElementById("username").value;
+            const cap = document.getElementById("captcha").value;
+            if(username && cap === "5") {
+                document.getElementById("login-box").style.display = "none";
+                document.getElementById("chat-box").style.display = "block";
+            } else {
+                alert("Username o captcha errati!");
+            }
+        }
+
+        function sendMsg() {
+            const m = document.getElementById("msg").value;
+            if(!m) return;
+            socket.emit("chat_message", username + ": " + m);
+            document.getElementById("msg").value = "";
+        }
+
+        socket.on("chat_message", (msg) => {
+            const box = document.getElementById("messages");
+            box.innerHTML += "<p>> " + msg + "</p>";
+            box.scrollTop = box.scrollHeight;
+        });
+    </script>
+</body>
+</html>
