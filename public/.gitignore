@@ -1,0 +1,16 @@
+# File di sistema
+.DS_Store
+Thumbs.db
+Desktop.ini
+NTUSER.DAT
+*.log
+
+# Cartelle IDE / editor
+.vscode/
+.idea/
+
+# Node / Expo
+node_modules/
+.expo/
+dist/
+build/
